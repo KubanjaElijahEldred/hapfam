@@ -1,0 +1,62 @@
+name: HAPFAM CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run vercel-build
+        env:
+          EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hapfam
+          POSTGRES_PASSWORD: hapfam
+          POSTGRES_DB: hapfam_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - name: Seed database
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://hapfam:hapfam@127.0.0.1:5432/hapfam_test
+        run: node src/seed.js
+      - name: Start API
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://hapfam:hapfam@127.0.0.1:5432/hapfam_test
+          JWT_SECRET: ci-test-secret
+        run: node src/index.js &
+      - name: End-to-end verification
+        working-directory: backend
+        env:
+          API_URL: http://127.0.0.1:4000
+          SEED_PASSWORD: Hapfam@2026Secure
+        run: node src/tests/e2e.js

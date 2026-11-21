@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "HAPFAM MMIS",
+    "slug": "hapfam",
+    "version": "1.0.0",
+    "orientation": "any",
+    "scheme": "hapfam",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "co.hapfam.mmis"
+    },
+    "android": {
+      "package": "co.hapfam.mmis",
+      "adaptiveIcon": {
+        "backgroundColor": "#103D28",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
