@@ -49,7 +49,8 @@ assets/images/            Locally stored WebP imagery (see ATTRIBUTION.md)
 * Manager posts an announcement to all departments or a selected department.
 * Every recipient gets a notification bell badge (polled from the API every 30 s).
 * Departments reply; replies carry the **source department** and author.
-* Manager sees every reply and its originating department; other departments are notified.
+* Replies are **private to Management** — department users cannot see each other's replies and are not notified about them.
+* Manager sees every reply and its originating department.
 
 ## Running locally
 
@@ -78,17 +79,13 @@ DATABASE_URL=postgres://hapfam@127.0.0.1:55432/hapfam_mmis npm start   # :4000
 Copy `.env.example` to `.env` and set `EXPO_PUBLIC_API_URL=http://127.0.0.1:4000`
 before building the frontend so it talks to the local API.
 
-### Demo accounts (password `Hapfam@2026Secure`, 17 characters)
+### Accounts
 
-| Email | Role / workspace |
-| --- | --- |
-| `manager@hapfam.co.ug` | Manager — announcements & audit |
-| `production@hapfam.co.ug` | Production Manager |
-| `inventory@hapfam.co.ug` | Store Keeper |
-| `quality@hapfam.co.ug` | Quality Assurance Officer |
-
-Passwords are bcrypt-hashed; new accounts require ≥12 characters with upper, lower,
-number and symbol. JWT bearer tokens protect every API route except login/health.
+The only provisioned bootstrap login is the Manager account
+(`manager@hapfam.co.ug`). The Manager creates every department head from
+**Management → Department Accounts**; there are no demo-account shortcuts in the
+sign-in screen. New passwords require ≥12 characters with upper, lower, number and
+symbol, are bcrypt-hashed, and access uses signed JWT tokens.
 
 ## Tests
 

@@ -169,38 +169,38 @@ function WorkflowRow({ icon, title, value, onPress }: { icon: React.ReactNode; t
 }
 
 const head = { flexDirection: 'row', alignItems: 'flex-end', marginBottom: 22, gap: 16, flexWrap: 'wrap' } as const;
-const eyebrow = { fontSize: 10, fontWeight: '800', letterSpacing: 1.5, color: C.primary } as const;
+const eyebrow = { fontSize: 12, fontWeight: '800', letterSpacing: 1.5, color: C.primary } as const;
 const title = { fontSize: 29, fontWeight: '800', color: C.text, letterSpacing: -0.8, marginTop: 6 } as const;
-const sub = { fontSize: 13, color: C.muted, marginTop: 6 } as const;
+const sub = { fontSize: 15, color: C.muted, marginTop: 6 } as const;
 const headRight = { flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' } as const;
 const datePill = { flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: C.white, borderWidth: 1, borderColor: C.border, borderRadius: RADIUS.pill, paddingHorizontal: 14, height: 42 } as const;
-const dateText = { fontSize: 12, color: C.muted, fontWeight: '600' } as const;
+const dateText = { fontSize: 14, color: C.muted, fontWeight: '600' } as const;
 const legend = { flexDirection: 'row', alignItems: 'center', gap: 16, marginTop: 14 } as const;
 const legendItem = { gap: 6 } as const;
-const legendText = { fontSize: 11, color: C.muted } as const;
+const legendText = { fontSize: 13, color: C.muted } as const;
 const legendDash = { width: 18, height: 2, backgroundColor: C.warning } as const;
-const sideTitle = { fontSize: 15, fontWeight: '800', color: C.text } as const;
-const sideSub = { fontSize: 11, color: C.muted, marginTop: 3, marginBottom: 8 } as const;
+const sideTitle = { fontSize: 17, fontWeight: '800', color: C.text } as const;
+const sideSub = { fontSize: 13, color: C.muted, marginTop: 3, marginBottom: 8 } as const;
 const ringFoot = { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 12 } as const;
-const ringVal = { fontSize: 11, fontWeight: '700', color: C.forest } as const;
+const ringVal = { fontSize: 13, fontWeight: '700', color: C.forest } as const;
 const productCard = { backgroundColor: C.white, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: C.border, overflow: 'hidden' } as const;
 const productImg = { height: 190, alignItems: 'center', justifyContent: 'center' } as const;
 const productBadge = { position: 'absolute', left: 12, top: 12 } as const;
 const productBody = { padding: 16 } as const;
-const pName = { fontSize: 15, fontWeight: '800', color: C.text } as const;
-const pDesc = { fontSize: 11.5, color: C.muted, lineHeight: 17, marginTop: 6, minHeight: 34 } as const;
+const pName = { fontSize: 17, fontWeight: '800', color: C.text } as const;
+const pDesc = { fontSize: 13, color: C.muted, lineHeight: 19, marginTop: 6, minHeight: 34 } as const;
 const pMeta = { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 14, borderTopWidth: 1, borderTopColor: C.border, paddingTop: 12 } as const;
-const pMetaVal = { fontSize: 15, fontWeight: '800', color: C.forest } as const;
-const pMetaLab = { fontSize: 10, color: C.muted, marginTop: 2 } as const;
+const pMetaVal = { fontSize: 17, fontWeight: '800', color: C.forest } as const;
+const pMetaLab = { fontSize: 12, color: C.muted, marginTop: 2 } as const;
 const pLink = { flexDirection: 'row', alignItems: 'center', gap: 4 } as const;
-const pLinkText = { fontSize: 11, fontWeight: '800', color: C.primary } as const;
+const pLinkText = { fontSize: 13, fontWeight: '800', color: C.primary } as const;
 const activityRow = { paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: '#F0F2ED' } as const;
-const actTitle = { fontSize: 12.5, fontWeight: '700', color: C.text } as const;
-const actDetail = { fontSize: 11, color: C.muted, marginTop: 2 } as const;
-const actTime = { fontSize: 10, color: C.muted } as const;
+const actTitle = { fontSize: 14, fontWeight: '700', color: C.text } as const;
+const actDetail = { fontSize: 13, color: C.muted, marginTop: 2 } as const;
+const actTime = { fontSize: 12, color: C.muted } as const;
 const wf = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 11, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#F0F2ED' },
   icon: { width: 36, height: 36, borderRadius: 10, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center' },
-  title: { fontSize: 12, fontWeight: '700', color: C.text },
-  value: { fontSize: 10.5, color: C.muted, marginTop: 2 },
+  title: { fontSize: 14, fontWeight: '700', color: C.text },
+  value: { fontSize: 12, color: C.muted, marginTop: 2 },
 });

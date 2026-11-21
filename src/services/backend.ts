@@ -40,6 +40,8 @@ export const auth = {
     setToken(data.token);
     return data.user;
   },
+  register: (body: { name: string; email: string; password: string; role: string; department: string }) =>
+    request<User>('/api/auth/register', { method: 'POST', body }),
   me: () => request<User>('/api/me'),
   health: () => request<{ ok: boolean; db: number }>('/api/health', { auth: false }),
 };

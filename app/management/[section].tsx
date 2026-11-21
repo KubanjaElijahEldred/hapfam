@@ -34,8 +34,8 @@ export default function Page() {
               <Row key={n.id} style={{ paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: '#F0F2ED', gap: 11 }}>
                 <IconBox tone={n.tone || 'info'} size={34}><Bell size={16} color={C.primary} /></IconBox>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 12, fontWeight: '800', color: C.text }}>{n.title}</Text>
-                  <Text style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{n.body}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '800', color: C.text }}>{n.title}</Text>
+                  <Text style={{ fontSize: 13, color: C.muted, marginTop: 2 }}>{n.body}</Text>
                 </View>
                 <Badge label={n.department} tone="neutral" />
               </Row>
@@ -56,10 +56,10 @@ export default function Page() {
               <Row key={a.id} style={{ paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: '#F0F2ED', gap: 11 }}>
                 <IconBox tone="forest" size={34}><ShieldCheck size={16} color={C.primary} /></IconBox>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 12, fontWeight: '800', color: C.text }}>{a.action} · {a.entity}</Text>
-                  <Text style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{a.actor} · {a.details || a.id}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '800', color: C.text }}>{a.action} · {a.entity}</Text>
+                  <Text style={{ fontSize: 13, color: C.muted, marginTop: 2 }}>{a.actor} · {a.details || a.id}</Text>
                 </View>
-                <Text style={{ fontSize: 10, color: C.muted }}>{new Date(a.created_at).toLocaleString()}</Text>
+                <Text style={{ fontSize: 12, color: C.muted }}>{new Date(a.created_at).toLocaleString()}</Text>
               </Row>
             ))}
           </Card>
@@ -73,9 +73,9 @@ export default function Page() {
       <View>
         <Header title="Management Settings" subtitle="System configuration and access information." />
         <Card>
-          <Row style={{ paddingVertical: 10, gap: 10 }}><Settings2 size={17} color={C.primary} /><Text style={{ fontSize: 12, color: C.text }}>Role: System Manager · Full cross-department oversight</Text></Row>
-          <Row style={{ paddingVertical: 10, gap: 10 }}><ShieldCheck size={17} color={C.primary} /><Text style={{ fontSize: 12, color: C.text }}>Password policy: minimum 12 characters with upper, lower, number and symbol</Text></Row>
-          <Row style={{ paddingVertical: 10, gap: 10 }}><Activity size={17} color={C.primary} /><Text style={{ fontSize: 12, color: C.text }}>Local activity records: {app.activities.length}</Text></Row>
+          <Row style={{ paddingVertical: 10, gap: 10 }}><Settings2 size={17} color={C.primary} /><Text style={{ fontSize: 14, color: C.text }}>Role: System Manager · Full cross-department oversight</Text></Row>
+          <Row style={{ paddingVertical: 10, gap: 10 }}><ShieldCheck size={17} color={C.primary} /><Text style={{ fontSize: 14, color: C.text }}>Password policy: minimum 12 characters with upper, lower, number and symbol</Text></Row>
+          <Row style={{ paddingVertical: 10, gap: 10 }}><Activity size={17} color={C.primary} /><Text style={{ fontSize: 14, color: C.text }}>Local activity records: {app.activities.length}</Text></Row>
         </Card>
       </View>
     </DepartmentShell>

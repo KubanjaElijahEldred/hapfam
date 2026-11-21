@@ -27,4 +27,5 @@ export const IMG = {
   lab: require('../assets/images/lab-detail.webp'),
   factory: require('../assets/images/factory-detail.webp'),
   field: require('../assets/images/farm-field.webp'),
+  back: require('../assets/images/back.webp'),
 } as const;

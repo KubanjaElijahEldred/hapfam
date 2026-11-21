@@ -627,42 +627,42 @@ export function SectionPage({ dept, section }: { dept: Dept; section: string }) 
 }
 
 /* styles */
-const cell = { fontSize: 11.5, color: C.text };
-const cellStrong = { fontSize: 11.5, color: C.text, fontWeight: '800' as const };
+const cell = { fontSize: 13, color: C.text };
+const cellStrong = { fontSize: 13, color: C.text, fontWeight: '800' as const };
 const cellRow = { gap: 8 };
 const cellImg = { width: 26, height: 26, borderRadius: 6 };
 const actRow = { gap: 6 };
 const actBtn = { borderWidth: 1, borderColor: C.primary, borderRadius: 7, paddingHorizontal: 10, paddingVertical: 6 };
-const actBtnText = { fontSize: 10.5, fontWeight: '800' as const, color: C.primary };
+const actBtnText = { fontSize: 12, fontWeight: '800' as const, color: C.primary };
 const nRow = { flexDirection: 'row' as const, alignItems: 'center' as const, padding: 14, borderBottomWidth: 1, borderBottomColor: '#F0F2ED' };
 const nUnread = { backgroundColor: '#F7FAF6' };
-const nTitle = { fontSize: 12.5, fontWeight: '800' as const, color: C.text };
-const nBody = { fontSize: 11, color: C.muted, marginTop: 3, lineHeight: 16 };
-const nTime = { fontSize: 10, color: C.muted, marginTop: 5 };
+const nTitle = { fontSize: 14, fontWeight: '800' as const, color: C.text };
+const nBody = { fontSize: 13, color: C.muted, marginTop: 3, lineHeight: 18 };
+const nTime = { fontSize: 12, color: C.muted, marginTop: 5 };
 const nDot = { width: 8, height: 8, borderRadius: 4, backgroundColor: C.fresh };
 const tg = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 13, borderBottomWidth: 1, borderBottomColor: '#F0F2ED' },
-  label: { fontSize: 12, color: C.text, fontWeight: '600' },
+  label: { fontSize: 14, color: C.text, fontWeight: '600' },
   track: { width: 42, height: 24, borderRadius: 12, backgroundColor: '#D9DED8', justifyContent: 'center', paddingHorizontal: 3 },
   knob: { width: 18, height: 18, borderRadius: 9, backgroundColor: C.white, position: 'absolute', left: 3 },
 });
 const schHead = { justifyContent: 'space-between' as const, marginBottom: 10 };
-const schName = { fontSize: 14, fontWeight: '800' as const, color: C.text, marginBottom: 8 };
+const schName = { fontSize: 16, fontWeight: '800' as const, color: C.text, marginBottom: 8 };
 const schBar = { marginTop: 12 };
-const finTitle = { fontSize: 14, fontWeight: '800' as const, color: C.text };
-const finSub = { fontSize: 11, color: C.muted, lineHeight: 17, marginTop: 5 };
+const finTitle = { fontSize: 16, fontWeight: '800' as const, color: C.text };
+const finSub = { fontSize: 13, color: C.muted, lineHeight: 19, marginTop: 5 };
 const holdNote = { flexDirection: 'row' as const, alignItems: 'center' as const, gap: 10, backgroundColor: C.dangerSoft, borderRadius: RADIUS.md, padding: 14, marginTop: 14 };
-const holdText = { flex: 1, fontSize: 11, color: '#9A5B57', lineHeight: 16 };
+const holdText = { flex: 1, fontSize: 13, color: '#9A5B57', lineHeight: 18 };
 const qaHeroIcon = { width: 44, height: 44, borderRadius: 13, alignItems: 'center' as const, justifyContent: 'center' as const };
-const qaHeroTitle = { fontSize: 13, fontWeight: '800' as const, color: C.text };
-const qaHeroSub = { fontSize: 10.5, color: C.muted, marginTop: 3 };
+const qaHeroTitle = { fontSize: 15, fontWeight: '800' as const, color: C.text };
+const qaHeroSub = { fontSize: 12, color: C.muted, marginTop: 3 };
 const detailBtns = { gap: 8, marginTop: 14 };
-const detailSub = { fontSize: 11, fontWeight: '800' as const, color: C.text, marginTop: 14, marginBottom: 2 };
+const detailSub = { fontSize: 13, fontWeight: '800' as const, color: C.text, marginTop: 14, marginBottom: 2 };
 const dm = StyleSheet.create({
   backdrop: { position: 'absolute', inset: 0, backgroundColor: 'rgba(8,32,20,0.45)' },
   sheet: { position: 'absolute', top: '10%', alignSelf: 'center', width: '92%', maxWidth: 600, maxHeight: '80%', backgroundColor: C.white, borderRadius: RADIUS.xl, overflow: 'hidden' },
   head: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 18, borderBottomWidth: 1, borderColor: C.border },
-  title: { fontSize: 17, fontWeight: '800', color: C.text },
+  title: { fontSize: 20, fontWeight: '800', color: C.text },
   body: { maxHeight: 460 },
   bodyPad: { padding: 18 },
   foot: { padding: 14, borderTopWidth: 1, borderColor: C.border, alignItems: 'flex-end' },

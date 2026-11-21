@@ -11,6 +11,10 @@ import {
   Building2, ArrowUpRight, CircleDot, PackageCheck, Megaphone, Activity,
 } from 'lucide-react-native';
 import { C, DEPARTMENTS, RADIUS } from '../theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ImageBackground } from 'expo-image';
+import { IMG } from '../assets';
+import { SkeletonDashboard } from './Skeleton';
 import { useApp } from '../store';
 import type { Dept } from '../types';
 import { Avatar, Badge } from './ui';
@@ -63,6 +67,7 @@ export const NAV: Record<Dept, { label: string; route: string; icon: IconType; g
   management: [
     { label: 'Dashboard', route: '/management/dashboard', icon: LayoutDashboard, group: 'Overview' },
     { label: 'Announcements', route: '/management/announcements', icon: Megaphone, group: 'Communications' },
+    { label: 'Department Accounts', route: '/management/users', icon: ShieldCheck },
     { label: 'Department Activity', route: '/management/activity', icon: Activity },
     { label: 'Audit Trail', route: '/management/audit', icon: ShieldCheck, group: 'Governance' },
     { label: 'Notifications', route: '/management/notifications', icon: Bell },
@@ -92,7 +97,7 @@ function Sidebar({ dept, pathname, onNavigate, onSwitch }: { dept: Dept; pathnam
   const items = NAV[dept];
   let group = '';
   return (
-    <View style={s.sidebar}>
+    <LinearGradient colors={[C.deep, '#0C3521', C.forest]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={s.sidebar}>
       <View style={s.brand}>
         <DeptMark />
         <View style={{ flex: 1 }}>
@@ -131,20 +136,25 @@ function Sidebar({ dept, pathname, onNavigate, onSwitch }: { dept: Dept; pathnam
         <View style={{ height: 18 }} />
       </ScrollView>
 
-      <Pressable onPress={onSwitch} style={s.switchBtn}>
-        <Building2 size={17} color="#CFE3D5" />
-        <Text style={s.switchText}>Switch department</Text>
-        <ChevronRight size={16} color="#8FB49C" />
-      </Pressable>
-      <View style={s.sideFoot}>
-        <Avatar name={dept === 'quality' ? 'Grace Akinyi' : dept === 'inventory' ? 'Alice Wambui' : dept === 'management' ? 'Elijah Kubanja' : 'Daniel Ochieng'} size={36} />
-        <View style={{ flex: 1 }}>
-          <Text style={s.footName}>{dept === 'quality' ? 'Grace Akinyi' : dept === 'inventory' ? 'Alice Wambui' : dept === 'management' ? 'Elijah Kubanja' : 'Daniel Ochieng'}</Text>
-          <Text style={s.footRole}>{ROLE[dept]}</Text>
+      {dept === 'management' ? (
+        <Pressable onPress={onSwitch} style={s.switchBtn}>
+          <Building2 size={17} color="#CFE3D5" />
+          <Text style={s.switchText}>Switch department</Text>
+          <ChevronRight size={16} color="#8FB49C" />
+        </Pressable>
+      ) : null}
+      <ImageBackground source={IMG.back} style={s.sideBottom} contentFit="cover">
+        <LinearGradient colors={['rgba(8,44,27,0.15)', C.deep]} style={s.sideBottomShade} />
+        <View style={s.sideFoot}>
+          <Avatar name={dept === 'quality' ? 'Grace Akinyi' : dept === 'inventory' ? 'Alice Wambui' : dept === 'management' ? 'Elijah Kubanja' : 'Daniel Ochieng'} size={36} />
+          <View style={{ flex: 1 }}>
+            <Text style={s.footName}>{dept === 'quality' ? 'Grace Akinyi' : dept === 'inventory' ? 'Alice Wambui' : dept === 'management' ? 'Elijah Kubanja' : 'Daniel Ochieng'}</Text>
+            <Text style={s.footRole}>{ROLE[dept]}</Text>
+          </View>
+          <CircleDot size={12} color={C.lemon} />
         </View>
-        <CircleDot size={12} color={C.fresh} />
-      </View>
-    </View>
+      </ImageBackground>
+    </LinearGradient>
   );
 }
 
@@ -166,6 +176,8 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
   const [notifs, setNotifs] = useState(false);
   const [profile, setProfile] = useState(false);
   const [switcher, setSwitcher] = useState(false);
+  const [booting, setBooting] = useState(true);
+  useEffect(() => { const id = setTimeout(() => setBooting(false), 650); return () => clearTimeout(id); }, [dept]);
 
   useEffect(() => {
     let alive = true;
@@ -245,10 +257,12 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
             ) : null}
           </Pressable>
         </View>
-        <ScrollView style={s.content} contentContainerStyle={[s.contentPad, width < 700 && { padding: 14 }]} showsVerticalScrollIndicator={false}>
-          {children}
-          <View style={{ height: 40 }} />
-        </ScrollView>
+        <LinearGradient colors={[C.cream, '#F3F8E8', C.cream]} style={s.content}>
+          <ScrollView contentContainerStyle={[s.contentPad, width < 700 && { padding: 14 }]} showsVerticalScrollIndicator={false}>
+            {booting ? <SkeletonDashboard /> : children}
+            <View style={{ height: 40 }} />
+          </ScrollView>
+        </LinearGradient>
       </View>
 
       {/* Global search */}
@@ -329,7 +343,9 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
               <Text style={modal.roleTitle}>Department access</Text>
               <Text style={modal.roleText}>You have full access to the {DEPARTMENTS[dept].full} workspace. Cross-department records are read-only and permission controlled.</Text>
             </View>
-            <Pressable onPress={() => { setProfile(false); setSwitcher(true); }} style={modal.menuItem}><Building2 size={18} color={C.text} /><Text style={modal.menuText}>Switch department</Text><ChevronRight size={16} color={C.muted} /></Pressable>
+            {dept === 'management' ? (
+              <Pressable onPress={() => { setProfile(false); setSwitcher(true); }} style={modal.menuItem}><Building2 size={18} color={C.text} /><Text style={modal.menuText}>Switch department</Text><ChevronRight size={16} color={C.muted} /></Pressable>
+            ) : null}
             <Pressable onPress={() => { setProfile(false); router.push('/' as any); }} style={modal.menuItem}><LogOut size={18} color={C.danger} /><Text style={[modal.menuText, { color: C.danger }]}>Back to department selector</Text></Pressable>
           </View>
         </View>
@@ -369,7 +385,7 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
 
 const sCount = StyleSheet.create({
   badge: { backgroundColor: C.danger, borderRadius: 9, minWidth: 18, paddingHorizontal: 4, alignItems: 'center', justifyContent: 'center', height: 18, marginLeft: 'auto' },
-  text: { color: C.white, fontSize: 10, fontWeight: '800' },
+  text: { color: C.white, fontSize: 12, fontWeight: '800' },
 });
 
 const modal = StyleSheet.create({
@@ -377,37 +393,37 @@ const modal = StyleSheet.create({
   sheet: { position: 'absolute', top: '12%', alignSelf: 'center', width: '92%', backgroundColor: C.white, borderRadius: RADIUS.xl, overflow: 'hidden', maxHeight: '76%' },
   right: { top: 0, right: 0, bottom: 0, left: undefined as any, alignSelf: undefined as any, width: 400, maxWidth: '92%', maxHeight: undefined as any, borderRadius: 0 },
   head: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 18, borderBottomWidth: 1, borderBottomColor: C.border },
-  headTitle: { fontSize: 16, fontWeight: '800', color: C.text },
-  link: { color: C.primary, fontSize: 12, fontWeight: '700' },
-  input: { flex: 1, fontSize: 14, color: C.text, marginLeft: 4 },
+  headTitle: { fontSize: 18, fontWeight: '800', color: C.text },
+  link: { color: C.primary, fontSize: 14, fontWeight: '700' },
+  input: { flex: 1, fontSize: 16, color: C.text, marginLeft: 4 },
   body: { padding: 14 },
-  group: { fontSize: 10, fontWeight: '800', color: C.muted, letterSpacing: 1.2, margin: 6 },
+  group: { fontSize: 12, fontWeight: '800', color: C.muted, letterSpacing: 1.2, margin: 6 },
   result: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: RADIUS.md },
   resultDot: { width: 8, height: 8, borderRadius: 4 },
-  resultTitle: { fontSize: 13, fontWeight: '700', color: C.text },
-  resultSub: { fontSize: 11, color: C.muted, marginTop: 2 },
+  resultTitle: { fontSize: 15, fontWeight: '700', color: C.text },
+  resultSub: { fontSize: 13, color: C.muted, marginTop: 2 },
   searchHint: { padding: 14, alignItems: 'center' },
-  hintText: { fontSize: 11, color: C.muted },
+  hintText: { fontSize: 13, color: C.muted },
   notif: { flexDirection: 'row', gap: 12, padding: 13, borderRadius: RADIUS.md, marginBottom: 6, backgroundColor: C.white },
   notifUnread: { backgroundColor: '#F6FAF5' },
   notifIcon: { width: 34, height: 34, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  notifTitle: { fontSize: 13, fontWeight: '700', color: C.text },
-  notifBody: { fontSize: 11, color: C.muted, marginTop: 3, lineHeight: 16 },
-  notifTime: { fontSize: 10, color: C.muted, marginTop: 5, fontWeight: '600' },
+  notifTitle: { fontSize: 15, fontWeight: '700', color: C.text },
+  notifBody: { fontSize: 13, color: C.muted, marginTop: 3, lineHeight: 18 },
+  notifTime: { fontSize: 12, color: C.muted, marginTop: 5, fontWeight: '600' },
   unreadDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: C.fresh, marginTop: 4 },
-  empty: { color: C.muted, textAlign: 'center', padding: 24, fontSize: 13 },
+  empty: { color: C.muted, textAlign: 'center', padding: 24, fontSize: 15 },
   profileHero: { alignItems: 'center', paddingVertical: 20, gap: 7 },
-  profName: { fontSize: 18, fontWeight: '800', color: C.text, marginTop: 6 },
-  profMail: { fontSize: 12, color: C.muted, marginBottom: 6 },
+  profName: { fontSize: 21, fontWeight: '800', color: C.text, marginTop: 6 },
+  profMail: { fontSize: 14, color: C.muted, marginBottom: 6 },
   roleBox: { backgroundColor: C.cream, borderRadius: RADIUS.md, padding: 14, marginBottom: 12 },
-  roleTitle: { fontSize: 12, fontWeight: '800', color: C.forest },
-  roleText: { fontSize: 11, color: C.muted, lineHeight: 17, marginTop: 5 },
+  roleTitle: { fontSize: 14, fontWeight: '800', color: C.forest },
+  roleText: { fontSize: 13, color: C.muted, lineHeight: 19, marginTop: 5 },
   menuItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: C.border },
-  menuText: { flex: 1, fontSize: 13, color: C.text, fontWeight: '600' },
+  menuText: { flex: 1, fontSize: 15, color: C.text, fontWeight: '600' },
   deptItem: { flexDirection: 'row', alignItems: 'center', gap: 13, padding: 12, borderRadius: RADIUS.md, marginBottom: 8, borderWidth: 1, borderColor: C.border },
   deptIcon: { width: 46, height: 46, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
-  deptTitle: { fontSize: 13, fontWeight: '800', color: C.text },
-  deptDesc: { fontSize: 11, color: C.muted, marginTop: 3 },
+  deptTitle: { fontSize: 15, fontWeight: '800', color: C.text },
+  deptDesc: { fontSize: 13, color: C.muted, marginTop: 3 },
 });
 
 const s = StyleSheet.create({
@@ -415,43 +431,45 @@ const s = StyleSheet.create({
   sidebar: { width: 264, backgroundColor: C.deep, paddingTop: 26, paddingBottom: 14 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 11, paddingHorizontal: 22, marginBottom: 26 },
   mark: { backgroundColor: 'rgba(140,207,69,0.13)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(140,207,69,0.3)' },
-  brandName: { color: C.white, fontSize: 19, fontWeight: '800', letterSpacing: 2 },
-  brandTag: { color: '#8FB49C', fontSize: 9.5, marginTop: 2, letterSpacing: 0.4 },
+  brandName: { color: C.white, fontSize: 22, fontWeight: '800', letterSpacing: 2 },
+  brandTag: { color: '#8FB49C', fontSize: 11, marginTop: 2, letterSpacing: 0.4 },
   deptCard: { marginHorizontal: 16, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: RADIUS.md, padding: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', marginBottom: 18 },
   deptCardTop: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 7 },
-  deptNo: { color: C.fresh, fontSize: 9, fontWeight: '800', letterSpacing: 1.2 },
-  deptName: { color: C.white, fontSize: 15, fontWeight: '800' },
-  deptSub: { color: '#8FB49C', fontSize: 10.5, marginTop: 3 },
+  deptNo: { color: C.fresh, fontSize: 10, fontWeight: '800', letterSpacing: 1.2 },
+  deptName: { color: C.white, fontSize: 17, fontWeight: '800' },
+  deptSub: { color: '#8FB49C', fontSize: 12, marginTop: 3 },
   navScroll: { flex: 1, paddingHorizontal: 12 },
-  groupLabel: { color: '#5E8A70', fontSize: 9, fontWeight: '800', letterSpacing: 1.3, marginTop: 16, marginBottom: 7, marginLeft: 12 },
+  groupLabel: { color: '#5E8A70', fontSize: 10, fontWeight: '800', letterSpacing: 1.3, marginTop: 16, marginBottom: 7, marginLeft: 12 },
   navItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 11, paddingHorizontal: 12, borderRadius: RADIUS.sm, position: 'relative' },
   navActive: { backgroundColor: 'rgba(140,207,69,0.14)' },
   activeBar: { position: 'absolute', left: 0, top: 9, bottom: 9, width: 3, borderRadius: 2, backgroundColor: C.fresh },
-  navText: { color: '#A9C3B4', fontSize: 12.5, fontWeight: '600', flex: 1 },
+  navText: { color: '#A9C3B4', fontSize: 14, fontWeight: '600', flex: 1 },
   navTextActive: { color: C.white, fontWeight: '800' },
   switchBtn: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 18, paddingVertical: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.09)' },
-  switchText: { color: '#CFE3D5', fontSize: 12, fontWeight: '600', flex: 1 },
-  sideFoot: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 18, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.09)' },
-  footName: { color: C.white, fontSize: 11.5, fontWeight: '700' },
-  footRole: { color: '#8FB49C', fontSize: 9.5, marginTop: 2 },
+  switchText: { color: '#CFE3D5', fontSize: 14, fontWeight: '600', flex: 1 },
+  sideBottom: { height: 132, justifyContent: 'flex-end', marginTop: 6 },
+  sideBottomShade: { position: 'absolute', inset: 0 },
+  sideFoot: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 18, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.16)' },
+  footName: { color: C.white, fontSize: 13, fontWeight: '700' },
+  footRole: { color: '#8FB49C', fontSize: 11, marginTop: 2 },
   drawerWrap: { position: 'absolute', inset: 0, zIndex: 50 },
   backdrop: { position: 'absolute', inset: 0, backgroundColor: 'rgba(8,32,20,0.5)' },
   drawer: { position: 'absolute', left: 0, top: 0, bottom: 0, width: 270 },
   main: { flex: 1, minWidth: 0 },
   topbar: { height: 72, backgroundColor: C.white, borderBottomWidth: 1, borderBottomColor: C.border, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 24, gap: 16 },
   crumbs: { flexDirection: 'row', alignItems: 'center', gap: 7, minWidth: 0, flexShrink: 1 },
-  crumbRoot: { color: C.muted, fontSize: 12, fontWeight: '700' },
-  crumbDept: { color: C.forest, fontSize: 12, fontWeight: '700' },
-  crumbPage: { color: C.text, fontSize: 12, fontWeight: '700' },
+  crumbRoot: { color: C.muted, fontSize: 14, fontWeight: '700' },
+  crumbDept: { color: C.forest, fontSize: 14, fontWeight: '700' },
+  crumbPage: { color: C.text, fontSize: 14, fontWeight: '700' },
   searchBox: { width: 250, flexDirection: 'row', alignItems: 'center', gap: 9, backgroundColor: C.cream, borderRadius: RADIUS.sm, paddingHorizontal: 12, height: 38 },
-  searchPlaceholder: { color: C.muted, fontSize: 11.5, flex: 1 },
-  searchKey: { color: C.muted, fontSize: 10, borderWidth: 1, borderColor: C.border, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 1 },
+  searchPlaceholder: { color: C.muted, fontSize: 13, flex: 1 },
+  searchKey: { color: C.muted, fontSize: 12, borderWidth: 1, borderColor: C.border, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 1 },
   iconBtn: { padding: 7, position: 'relative' },
   bellBadge: { position: 'absolute', right: 2, top: 2, backgroundColor: C.danger, minWidth: 16, height: 16, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
-  bellText: { color: C.white, fontSize: 9, fontWeight: '800' },
+  bellText: { color: C.white, fontSize: 10, fontWeight: '800' },
   profileBtn: { flexDirection: 'row', alignItems: 'center' },
-  profName: { color: C.text, fontSize: 11.5, fontWeight: '700' },
-  profRole: { color: C.muted, fontSize: 9.5, marginTop: 1 },
+  profName: { color: C.text, fontSize: 13, fontWeight: '700' },
+  profRole: { color: C.muted, fontSize: 11, marginTop: 1 },
   content: { flex: 1 },
   contentPad: { padding: 24, maxWidth: 1400, width: '100%', alignSelf: 'center' },
 });

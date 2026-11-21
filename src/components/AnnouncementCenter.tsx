@@ -82,7 +82,7 @@ export function AnnouncementCenter({ dept, compact = false }: { dept: Dept; comp
             <View style={compactIcon}><Megaphone size={15} color={C.primary} /></View>
             <View style={{ flex: 1 }}>
               <Text style={compactTitle} numberOfLines={1}>{a.title}</Text>
-              <Text style={compactBody} numberOfLines={1}>From {a.author_department} · {a.replies.length} replies</Text>
+              <Text style={compactBody} numberOfLines={1}>From {a.author_department}{isManager ? ` · ${a.replies.length} replies` : ''}</Text>
             </View>
           </Row>
         ))}
@@ -150,7 +150,9 @@ export function AnnouncementCenter({ dept, compact = false }: { dept: Dept; comp
           </Row>
           <Text style={annBody}>{a.body}</Text>
           <View style={replySection}>
-            <Row style={replyHeading}><MessageSquare size={14} color={C.muted} /><Text style={replyHeadingText}>Replies ({a.replies.length})</Text></Row>
+            {isManager ? (
+            <>
+            <Row style={replyHeading}><MessageSquare size={14} color={C.muted} /><Text style={replyHeadingText}>Replies ({a.replies.length}) · visible only to Management</Text></Row>
             {a.replies.length === 0 ? <Text style={noReplies}>No replies yet.</Text> : a.replies.map(r => (
               <View key={r.id} style={replyItem}>
                 <Avatar name={r.author_name} size={28} />
@@ -163,6 +165,8 @@ export function AnnouncementCenter({ dept, compact = false }: { dept: Dept; comp
                 </View>
               </View>
             ))}
+            </>
+            ) : null}
             {replyFor === a.id ? (
               <View style={replyCompose}>
                 <TextInput value={replyText} onChangeText={setReplyText} placeholder="Write a reply to Management and other departments…" placeholderTextColor={C.muted} multiline style={[input, textarea]} />
@@ -183,42 +187,42 @@ export function AnnouncementCenter({ dept, compact = false }: { dept: Dept; comp
   );
 }
 
-const inputStyle = { borderWidth: 1, borderColor: C.border, borderRadius: RADIUS.sm, paddingHorizontal: 13, height: 44, fontSize: 13, color: C.text, backgroundColor: C.white } as const;
+const inputStyle = { borderWidth: 1, borderColor: C.border, borderRadius: RADIUS.sm, paddingHorizontal: 13, height: 44, fontSize: 15, color: C.text, backgroundColor: C.white } as const;
 const input = inputStyle;
 const textarea = { height: 90, paddingTop: 12, textAlignVertical: 'top' as const };
-const label = { fontSize: 12, fontWeight: '700' as const, color: C.text, marginTop: 12, marginBottom: 6 };
+const label = { fontSize: 14, fontWeight: '700' as const, color: C.text, marginTop: 12, marginBottom: 6 };
 const compactRow = { paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#F0F2ED' };
 const compactIcon = { width: 30, height: 30, borderRadius: 9, backgroundColor: C.successSoft, alignItems: 'center' as const, justifyContent: 'center' as const };
-const compactTitle = { fontSize: 12, fontWeight: '700' as const, color: C.text };
-const compactBody = { fontSize: 10, color: C.muted, marginTop: 2 };
+const compactTitle = { fontSize: 14, fontWeight: '700' as const, color: C.text };
+const compactBody = { fontSize: 12, color: C.muted, marginTop: 2 };
 const refreshBtn = { flexDirection: 'row' as const, alignItems: 'center' as const, gap: 6, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: C.border, borderRadius: RADIUS.sm };
-const refreshText = { fontSize: 12, color: C.primary, fontWeight: '700' as const };
+const refreshText = { fontSize: 14, color: C.primary, fontWeight: '700' as const };
 const statusRow = { gap: 10, marginBottom: 16, alignItems: 'center' as const };
-const statusText = { fontSize: 11, color: C.muted };
+const statusText = { fontSize: 13, color: C.muted };
 const pills = { gap: 8, flexWrap: 'wrap' as const, marginBottom: 4 };
 const pill = { paddingHorizontal: 12, paddingVertical: 8, borderRadius: RADIUS.sm, borderWidth: 1, borderColor: C.border, backgroundColor: C.white };
 const pillOn = { backgroundColor: C.forest, borderColor: C.forest };
-const pillText = { fontSize: 11, color: C.muted, fontWeight: '700' as const };
+const pillText = { fontSize: 13, color: C.muted, fontWeight: '700' as const };
 const pillTextOn = { color: C.white };
 const sendRow = { flexDirection: 'row' as const, alignItems: 'center' as const, justifyContent: 'space-between' as const, marginTop: 16, flexWrap: 'wrap' as const, gap: 10 };
-const messageText = { fontSize: 11, color: C.primary, fontWeight: '600' as const };
+const messageText = { fontSize: 13, color: C.primary, fontWeight: '600' as const };
 const loadingBox = { alignItems: 'center' as const, padding: 30, gap: 8 };
-const loadingText = { fontSize: 12, color: C.muted };
+const loadingText = { fontSize: 14, color: C.muted };
 const annHead = { gap: 11, marginBottom: 12 };
 const annIcon = { width: 38, height: 38, borderRadius: 11, backgroundColor: C.successSoft, alignItems: 'center' as const, justifyContent: 'center' as const };
-const annTitle = { fontSize: 15, fontWeight: '800' as const, color: C.text };
+const annTitle = { fontSize: 17, fontWeight: '800' as const, color: C.text };
 const annMeta = { gap: 8, marginTop: 6, flexWrap: 'wrap' as const, alignItems: 'center' as const };
-const annBy = { fontSize: 10.5, color: C.muted };
-const annBody = { fontSize: 12.5, color: C.text, lineHeight: 19 };
+const annBy = { fontSize: 12, color: C.muted };
+const annBody = { fontSize: 14, color: C.text, lineHeight: 21 };
 const replySection = { marginTop: 14, borderTopWidth: 1, borderTopColor: C.border, paddingTop: 12 };
 const replyHeading = { gap: 6, marginBottom: 10 };
-const replyHeadingText = { fontSize: 11, fontWeight: '800' as const, color: C.text };
-const noReplies = { fontSize: 11, color: C.muted, fontStyle: 'italic' as const };
+const replyHeadingText = { fontSize: 13, fontWeight: '800' as const, color: C.text };
+const noReplies = { fontSize: 13, color: C.muted, fontStyle: 'italic' as const };
 const replyItem = { flexDirection: 'row' as const, gap: 9, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#F2F4F0' };
 const replyMeta = { gap: 7, alignItems: 'center' as const };
-const replyAuthor = { fontSize: 11, fontWeight: '800' as const, color: C.text };
-const replyBody = { fontSize: 11.5, color: C.muted, marginTop: 4, lineHeight: 17 };
+const replyAuthor = { fontSize: 13, fontWeight: '800' as const, color: C.text };
+const replyBody = { fontSize: 13, color: C.muted, marginTop: 4, lineHeight: 19 };
 const replyCompose = { marginTop: 10 };
 const replyActions = { gap: 8, justifyContent: 'flex-end' as const, marginTop: 8 };
 const replyBtn = { flexDirection: 'row' as const, alignItems: 'center' as const, gap: 6, marginTop: 10, paddingVertical: 8 };
-const replyBtnText = { fontSize: 11, color: C.primary, fontWeight: '800' as const };
+const replyBtnText = { fontSize: 13, color: C.primary, fontWeight: '800' as const };

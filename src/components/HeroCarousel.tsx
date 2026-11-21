@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react-native';
 import { ImageBackground } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { C, RADIUS, SHADOW } from '../theme';
 
 export interface Slide {
@@ -64,8 +65,8 @@ export function HeroCarousel({ slides, height = 330 }: { slides: Slide[]; height
       >
         {slides.map((s, i) => (
           <ImageBackground key={i} source={s.image} style={[styles.slide, { width: w || Math.max(280, width - (width >= 1024 ? 312 : 32) - 48), height: h }]} contentFit="cover">
-            <View style={[styles.shade, { backgroundColor: 'rgba(8,44,27,0.42)' }]} />
-            <View style={[styles.bottomShade, { backgroundColor: 'rgba(8,44,27,0.72)' }]} />
+            <View style={[styles.shade, { backgroundColor: 'rgba(8,44,27,0.16)' }]} />
+            <LinearGradient colors={['rgba(8,44,27,0)', 'rgba(8,44,27,0.85)']} style={styles.bottomShade} />
             <View style={styles.content}>
               <View style={[styles.eyebrow, { backgroundColor: s.accent || C.fresh }]}>
                 <Text style={styles.eyebrowText}>{s.eyebrow}</Text>
@@ -110,12 +111,12 @@ const styles = StyleSheet.create({
   scroller: { width: '100%', height: '100%' },
   slide: { justifyContent: 'flex-end' },
   shade: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-  bottomShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '78%' },
+  bottomShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '82%' },
   content: { padding: 30, paddingBottom: 34, maxWidth: 620 },
   eyebrow: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 6, borderRadius: RADIUS.pill, marginBottom: 14 },
-  eyebrowText: { color: C.deep, fontSize: 10, fontWeight: '800', letterSpacing: 1.3, textTransform: 'uppercase' },
+  eyebrowText: { color: C.deep, fontSize: 12, fontWeight: '800', letterSpacing: 1.3, textTransform: 'uppercase' },
   title: { color: C.white, fontWeight: '800', letterSpacing: -1, lineHeight: 44 },
-  subtitle: { color: '#DDEBE0', fontSize: 15, marginTop: 8, fontWeight: '500' },
+  subtitle: { color: '#DDEBE0', fontSize: 17, marginTop: 8, fontWeight: '500' },
   arrow: { position: 'absolute', top: '50%', marginTop: -19, width: 38, height: 38, borderRadius: 19, backgroundColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center' },
   left: { left: 16 },
   right: { right: 16 },
@@ -124,5 +125,5 @@ const styles = StyleSheet.create({
   dotBtn: { padding: 6 },
   dot: { width: 7, height: 7, borderRadius: 4 },
   pauseBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(255,255,255,0.16)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: RADIUS.pill },
-  pauseText: { color: C.white, fontSize: 11, fontWeight: '700' },
+  pauseText: { color: C.white, fontSize: 13, fontWeight: '700' },
 });

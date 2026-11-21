@@ -58,11 +58,11 @@ export function ManagementDashboard() {
 }
 
 const head = { flexDirection: 'row' as const, alignItems: 'flex-end' as const, marginBottom: 22 };
-const eyebrow = { fontSize: 10, fontWeight: '800' as const, letterSpacing: 1.5, color: C.primary };
+const eyebrow = { fontSize: 12, fontWeight: '800' as const, letterSpacing: 1.5, color: C.primary };
 const title = { fontSize: 29, fontWeight: '800' as const, color: C.text, letterSpacing: -0.8, marginTop: 6 };
-const sub = { fontSize: 13, color: C.muted, marginTop: 6 };
+const sub = { fontSize: 15, color: C.muted, marginTop: 6 };
 const deptRow = { flexDirection: 'row' as const, gap: 12, flexWrap: 'wrap' as const };
 const deptCard = { flex: 1, minWidth: 170, backgroundColor: C.cream, borderRadius: RADIUS.md, padding: 14 };
 const deptIcon = { width: 34, height: 34, borderRadius: 10, alignItems: 'center' as const, justifyContent: 'center' as const, marginBottom: 10 };
-const deptName = { fontSize: 12.5, fontWeight: '800' as const, color: C.text };
-const deptCount = { fontSize: 10.5, color: C.muted, marginTop: 3 };
+const deptName = { fontSize: 14, fontWeight: '800' as const, color: C.text };
+const deptCount = { fontSize: 12, color: C.muted, marginTop: 3 };

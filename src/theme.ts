@@ -7,6 +7,8 @@ export const C = {
   deep: '#082C1B',
   primary: '#218B45',
   fresh: '#8CCF45',
+  lemon: '#C7F04A',
+  lemonSoft: '#EAF7CE',
   cream: '#F8F5EB',
   creamDark: '#EFEAD9',
   white: '#FFFFFF',

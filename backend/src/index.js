@@ -193,7 +193,7 @@ app.get('/api/announcements', requireAuth, async (req, res) => {
   const byAnn = {};
   replies.rows.forEach(r => { (byAnn[r.announcement_id] ||= []).push(r); });
   const visible = req.user.role === 'Manager' ? rows : rows.filter(a => a.audience === 'all' || a.audience === req.user.department);
-  res.json(visible.map(a => ({ ...a, replies: byAnn[a.id] || [] })));
+  res.json(visible.map(a => ({ ...a, replies: req.user.role === 'Manager' ? (byAnn[a.id] || []) : [] })));
 });
 
 app.post('/api/announcements', requireAuth, requireManager, async (req, res) => {
@@ -218,9 +218,6 @@ app.post('/api/announcements/:id/replies', requireAuth, async (req, res) => {
   await pool.query('INSERT INTO announcement_replies (id,announcement_id,department,author_name,body) VALUES ($1,$2,$3,$4,$5)',
     [id, req.params.id, department, req.user.name, body]);
   await notify('management', `Reply from ${department}`, `${req.user.name}: ${body.slice(0, 90)}`, 'info', req.params.id);
-  for (const dept of DEPARTMENTS.filter(d => d !== department)) {
-    await notify(dept, `Reply from ${department}`, `${req.user.name} replied to an announcement.`, 'info', req.params.id);
-  }
   await audit(req.user.name, 'reply', 'announcement', req.params.id);
   res.status(201).json({ id, announcement_id: req.params.id, department, author_name: req.user.name, body });
 });
