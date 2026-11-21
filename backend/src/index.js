@@ -233,6 +233,14 @@ app.delete('/api/announcements/:id', requireAuth, requireManager, async (req, re
 });
 
 /* -------------------------------- notifications -------------------------------- */
+app.post('/api/notifications', requireAuth, async (req, res) => {
+  const { department, title, body, tone = 'info', ref_id = null } = req.body || {};
+  if (!department || !title || !body) return res.status(400).json({ error: 'department, title and body are required' });
+  const id = uid('NOT');
+  await pool.query('INSERT INTO notifications (id,department,title,body,tone,ref_id) VALUES ($1,$2,$3,$4,$5,$6)', [id, department, title, body, tone, ref_id]);
+  res.status(201).json({ id });
+});
+
 app.get('/api/notifications', requireAuth, async (req, res) => {
   const target = req.user.role === 'Manager' ? req.query.department || 'management' : req.user.department;
   const { rows } = await pool.query('SELECT * FROM notifications WHERE department=$1 ORDER BY created_at DESC LIMIT 100', [target]);

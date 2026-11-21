@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { IMG } from './assets';
+import { records as recordApi, request as apiRequest } from './services/backend';
 import type {
   Activity, AppNotification, Batch, Decision, Dept, FinishedGood, Flavor,
   Inspection, Material, MaterialRequest, Movement, NCR, ProductionOrder,
@@ -155,6 +156,7 @@ interface StoreApi extends AppState {
   updateOrderStatus: (id: string, status: ProductionOrder['status']) => void;
   adjustStock: (materialId: string, delta: number, reason: string) => void;
   recordRawInspection: (v: Input) => void;
+  hydrate: (partial: Partial<AppState>) => void;
   addRemoteNotifications: (items: AppNotification[]) => void;
   markRead: (id: string) => void;
   markAllRead: (dept: Dept) => void;
@@ -168,11 +170,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const addLog = (dept: Dept, text: string, detail: string, tone: Activity['tone']) =>
     ({ id: uid('A'), dept, text, detail, time: `Today, ${t()}`, tone });
 
-  const notify: StoreApi['notify'] = (dept, title, body, tone = 'info') =>
+  const notify: StoreApi['notify'] = (dept, title, body, tone = 'info') => {
     setS(p => ({ ...p, notifications: [{ id: uid('N'), dept, title, body, time: t(), read: false, tone }, ...p.notifications] }));
+    apiRequest('/api/notifications', { method: 'POST', body: { department: dept, title, body, tone } }).catch(() => {});
+  };
 
   const api: StoreApi = useMemo(() => ({
     ...s,
+    hydrate: partial => setS(p => ({ ...p, ...partial })),
     notify,
 
     createOrder: v => {
@@ -312,11 +317,46 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       return fresh.length ? { ...p, notifications: [...fresh, ...p.notifications] } : p;
     }),
 
-    markRead: id => setS(p => ({ ...p, notifications: p.notifications.map(n => n.id === id ? { ...n, read: true } : n) })),
-    markAllRead: dept => setS(p => ({ ...p, notifications: p.notifications.map(n => n.dept === dept ? { ...n, read: true } : n) })),
+    markRead: id => {
+      setS(p => ({ ...p, notifications: p.notifications.map(n => n.id === id ? { ...n, read: true } : n) }));
+      apiRequest(`/api/notifications/${id}/read`, { method: 'PATCH' }).catch(() => {});
+    },
+    markAllRead: dept => {
+      setS(p => ({ ...p, notifications: p.notifications.map(n => n.dept === dept ? { ...n, read: true } : n) }));
+      apiRequest(`/api/notifications/read-all?department=${dept}`, { method: 'PATCH' }).catch(() => {});
+    },
   }), [s]);
 
-  return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
+  const hydrate: StoreApi['hydrate'] = partial => setS(p => ({ ...p, ...partial }));
+
+  const refresh = useCallback(async () => {
+    const kinds = ['products', 'materials', 'orders', 'batches', 'requests', 'movements', 'inspections', 'decisions', 'ncrs', 'finished', 'specs'];
+    const results = await Promise.all(kinds.map(k => recordApi.list(k).catch(() => null)));
+    const next: Partial<AppState> = {};
+    kinds.forEach((k, i) => {
+      const data = results[i];
+      if (Array.isArray(data) && data.length) (next as any)[k] = data;
+    });
+    if (Object.keys(next).length) setS(p => ({ ...p, ...next }));
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    const id = setInterval(refresh, 15000);
+    return () => clearInterval(id);
+  }, [refresh]);
+
+  const liveApi: StoreApi = useMemo(() => new Proxy(api, {
+    get(target, prop) {
+      const value = (target as any)[prop];
+      if (typeof value === 'function' && !['notify', 'markRead', 'markAllRead', 'hydrate', 'addRemoteNotifications'].includes(String(prop))) {
+        return (...args: any[]) => { const result = value(...args); void refresh(); return result; };
+      }
+      return value;
+    },
+  }) as StoreApi, [api, refresh]);
+
+  return <Ctx.Provider value={liveApi}>{children}</Ctx.Provider>;
 }
 
 export function useApp() {
