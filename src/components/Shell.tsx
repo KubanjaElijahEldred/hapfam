@@ -143,7 +143,7 @@ function Sidebar({ dept, pathname, onNavigate, onSwitch }: { dept: Dept; pathnam
         </Pressable>
       ) : null}
       <ImageBackground source={IMG.back} style={s.sideBottom} contentFit="cover">
-        <LinearGradient colors={['rgba(8,44,27,0.15)', C.deep]} style={s.sideBottomShade} />
+        <LinearGradient colors={['rgba(8,44,27,0.04)', 'rgba(8,44,27,0.88)']} style={s.sideBottomShade} />
         <View style={s.sideFoot}>
           <Avatar name={dept === 'quality' ? 'Grace Akinyi' : dept === 'inventory' ? 'Alice Wambui' : dept === 'management' ? 'Elijah Kubanja' : 'Daniel Ochieng'} size={36} />
           <View style={{ flex: 1 }}>
@@ -445,7 +445,7 @@ const s = StyleSheet.create({
   navTextActive: { color: C.white, fontWeight: '800' },
   switchBtn: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 18, paddingVertical: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.09)' },
   switchText: { color: '#CFE3D5', fontSize: 14, fontWeight: '600', flex: 1 },
-  sideBottom: { height: 132, justifyContent: 'flex-end', marginTop: 6 },
+  sideBottom: { height: 168, justifyContent: 'flex-end', marginTop: 6 },
   sideBottomShade: { position: 'absolute', inset: 0 },
   sideFoot: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 18, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.16)' },
   footName: { color: C.white, fontSize: 13, fontWeight: '700' },

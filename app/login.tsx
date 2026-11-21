@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, ImageBackground } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Leaf, ShieldCheck, Eye, EyeOff, ArrowRight, CheckCircle2, XCircle } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import { C, RADIUS } from '../src/theme';
@@ -19,6 +19,7 @@ const rules = [
 
 export default function Login() {
   const router = useRouter();
+  const { next } = useLocalSearchParams<{ next?: string }>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
@@ -30,8 +31,8 @@ export default function Login() {
     setBusy(true); setError('');
     try {
       const user = await auth.login(email, password);
-      const route = user.department === 'management' ? '/management/dashboard'
-        : `/${user.department}/dashboard`;
+      const allowed = next && /^\/(production|inventory|quality|management)\//.test(next);
+      const route = allowed ? next! : (user.department === 'management' ? '/management/dashboard' : `/${user.department}/dashboard`);
       router.push(route as any);
     } catch (e: any) {
       setError(e.message || 'Sign in failed. Is the API running?');

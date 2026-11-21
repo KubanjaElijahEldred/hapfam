@@ -108,7 +108,7 @@ export default function Launcher() {
               const I = w.icon;
               return (
                 <Entrance key={w.dept.key} delay={i * 55} style={{ width: `${100 / cols}%`, paddingHorizontal: 5, paddingBottom: 8 }}>
-                  <Pressable onPress={() => router.push(w.dept.route as any)} style={({ pressed }) => [s.card, pressed && { opacity: 0.82, transform: [{ scale: 0.985 }] }]}>
+                  <Pressable onPress={() => router.push(`/login?next=${encodeURIComponent(w.dept.route)}` as any)} style={({ pressed }) => [s.card, pressed && { opacity: 0.82, transform: [{ scale: 0.985 }] }]}>
                     <View style={[s.cardMain, { backgroundColor: w.dept.key === 'quality' ? '#16103A' : C.deep }]}>
                       <View style={[s.cardIcon, { backgroundColor: w.tone }]}><I size={22} color={C.white} strokeWidth={2.2} /></View>
                       <Text style={s.cardNo}>{w.dept.no === 'MGMT' ? 'MANAGEMENT' : `DEPARTMENT ${w.dept.no}`}</Text>
