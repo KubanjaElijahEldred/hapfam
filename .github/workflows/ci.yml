@@ -53,7 +53,13 @@ jobs:
         env:
           DATABASE_URL: postgres://hapfam:hapfam@127.0.0.1:5432/hapfam_test
           JWT_SECRET: ci-test-secret
-        run: node src/index.js &
+        run: |
+          nohup node src/index.js > api.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4000/api/health >/dev/null; then echo "API ready"; exit 0; fi
+            sleep 1
+          done
+          cat api.log; exit 1
       - name: End-to-end verification
         working-directory: backend
         env:
