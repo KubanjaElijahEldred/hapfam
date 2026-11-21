@@ -346,11 +346,38 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(id);
   }, [refresh]);
 
+  const persist: Record<string, (...args: any[]) => Promise<any>> = {
+    createOrder: v => apiRequest('/api/records/orders', { method: 'POST', body: v }),
+    requestMaterial: v => apiRequest('/api/records/requests', { method: 'POST', body: v }),
+    issueMaterial: (id, qty) => apiRequest('/api/workflow/issue', { method: 'POST', body: { requestId: id, qty } }),
+    rejectRequest: id => apiRequest(`/api/records/requests/${id}`, { method: 'PUT', body: { status: 'Rejected' } }),
+    createBatch: v => apiRequest('/api/records/batches', { method: 'POST', body: v }),
+    submitBatch: id => apiRequest(`/api/records/batches/${id}`, { method: 'PUT', body: { status: 'In Inspection' } }),
+    recordDecision: (id, decision, reason, results) => apiRequest('/api/workflow/decision', { method: 'POST', body: { batchId: id, decision, reason, results } }),
+    receiveDelivery: v => apiRequest('/api/workflow/delivery', { method: 'POST', body: { materialId: v.materialId, qty: v.qty, supplier: v.supplier } }),
+    registerMaterial: v => apiRequest('/api/records/materials', { method: 'POST', body: v }),
+    createNCR: v => apiRequest('/api/records/ncrs', { method: 'POST', body: v }),
+    updateNCR: (id, status) => apiRequest(`/api/records/ncrs/${id}`, { method: 'PUT', body: { status } }),
+    saveSpec: v => apiRequest('/api/records/specs', { method: 'POST', body: v }),
+    updateOrderStatus: (id, status) => apiRequest(`/api/records/orders/${id}`, { method: 'PUT', body: { status } }),
+    adjustStock: async (id, delta, reason) => {
+      const mat: any = await apiRequest(`/api/records/materials/${id}`);
+      await apiRequest(`/api/records/materials/${id}`, { method: 'PUT', body: { qty: Math.max(0, mat.qty + delta) } });
+      await apiRequest('/api/records/movements', { method: 'POST', body: { materialId: id, type: 'Adjustment', qty: delta, ref: reason } });
+    },
+    recordRawInspection: v => apiRequest('/api/records/inspections', { method: 'POST', body: v }),
+  };
+
   const liveApi: StoreApi = useMemo(() => new Proxy(api, {
     get(target, prop) {
       const value = (target as any)[prop];
       if (typeof value === 'function' && !['notify', 'markRead', 'markAllRead', 'hydrate', 'addRemoteNotifications'].includes(String(prop))) {
-        return (...args: any[]) => { const result = value(...args); void refresh(); return result; };
+        return (...args: any[]) => {
+          const result = value(...args);
+          const task = persist[String(prop)] ? persist[String(prop)](...args) : Promise.resolve();
+          task.catch(() => {}).finally(() => { void refresh(); });
+          return result;
+        };
       }
       return value;
     },
