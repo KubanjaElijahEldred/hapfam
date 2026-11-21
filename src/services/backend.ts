@@ -24,6 +24,7 @@ export async function request<T = any>(path: string, opts: { method?: string; bo
     method: opts.method || 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Ngrok-Skip-Browser-Warning': 'true',
       ...(opts.auth !== false && token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
