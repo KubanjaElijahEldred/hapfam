@@ -1,8 +1,20 @@
 const { Pool } = require('pg');
 
+let connectionString = process.env.DATABASE_URL || 'postgres://hapfam@127.0.0.1:55432/hapfam_mmis';
+const hosted = !connectionString.includes('127.0.0.1') && !connectionString.includes('localhost');
+if (hosted) {
+  const q = connectionString.indexOf('?');
+  if (q >= 0) {
+    const base = connectionString.slice(0, q);
+    const params = new URLSearchParams(connectionString.slice(q + 1));
+    params.delete('sslmode');
+    connectionString = base + (params.toString() ? '?' + params.toString() : '');
+  }
+}
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgres://hapfam@127.0.0.1:55432/hapfam_mmis',
+  connectionString,
   max: 10,
+  ...(hosted ? { ssl: { rejectUnauthorized: false } } : {}),
 });
 
 const SCHEMA = `

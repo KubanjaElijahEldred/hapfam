@@ -102,7 +102,9 @@ departments and audit permissions.
 ## Deployment
 
 * Web export is a static SPA (`dist/`). GitHub Actions runs CI and deploys to Vercel.
-* Vercel project: **hapfam** → `https://hapfam.vercel.app`
+* Web: **hapfam** → `https://hapfam.vercel.app`
+* API: **hapfam-api** → `https://hapfam-api.vercel.app` (Express serverless function on Vercel)
+* Database: Supabase PostgreSQL resource **hapfam-db**, connected to both projects; seeded with `node src/seed.js`.
 * Required GitHub secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`,
   `EXPO_PUBLIC_API_URL`, `DATABASE_URL`, `JWT_SECRET`, `SEED_PASSWORD`.
 * Content imagery is WebP. Platform app icons remain PNG because Expo/iOS require PNG.

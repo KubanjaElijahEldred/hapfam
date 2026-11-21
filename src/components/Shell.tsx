@@ -14,7 +14,6 @@ import { C, DEPARTMENTS, RADIUS } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ImageBackground } from 'expo-image';
 import { IMG } from '../assets';
-import { SkeletonDashboard } from './Skeleton';
 import { useApp } from '../store';
 import type { Dept } from '../types';
 import { Avatar, Badge } from './ui';
@@ -176,8 +175,7 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
   const [notifs, setNotifs] = useState(false);
   const [profile, setProfile] = useState(false);
   const [switcher, setSwitcher] = useState(false);
-  const [booting, setBooting] = useState(true);
-  useEffect(() => { const id = setTimeout(() => setBooting(false), 650); return () => clearTimeout(id); }, [dept]);
+
 
   useEffect(() => {
     let alive = true;
@@ -259,7 +257,7 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
         </View>
         <LinearGradient colors={[C.cream, '#F3F8E8', C.cream]} style={s.content}>
           <ScrollView contentContainerStyle={[s.contentPad, width < 700 && { padding: 14 }]} showsVerticalScrollIndicator={false}>
-            {booting ? <SkeletonDashboard /> : children}
+            {children}
             <View style={{ height: 40 }} />
           </ScrollView>
         </LinearGradient>
