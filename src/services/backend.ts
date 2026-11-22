@@ -20,6 +20,7 @@ export function getToken() { return token; }
 export interface User { id: string; name: string; email: string; role: string; department: string }
 
 export async function request<T = any>(path: string, opts: { method?: string; body?: any; auth?: boolean } = {}): Promise<T> {
+  if (opts.auth !== false && !token) throw new Error('Not authenticated');
   const res = await fetch(`${BASE}${path}`, {
     method: opts.method || 'GET',
     headers: {

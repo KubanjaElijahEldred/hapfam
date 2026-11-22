@@ -8,8 +8,8 @@ export function SkeletonBlock({ width = '100%', height = 16, radius = 8, style }
   const anim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     const loop = Animated.loop(Animated.sequence([
-      Animated.timing(anim, { toValue: 1, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
-      Animated.timing(anim, { toValue: 0, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      Animated.timing(anim, { toValue: 1, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: false }),
+      Animated.timing(anim, { toValue: 0, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: false }),
     ]));
     loop.start();
     return () => loop.stop();
@@ -45,10 +45,10 @@ export function RouteTransition() {
     if (first.current) { first.current = false; return; }
     setVisible(true);
     fade.setValue(1);
-    const loop = Animated.loop(Animated.timing(spin, { toValue: 1, duration: 1400, easing: Easing.linear, useNativeDriver: true }));
+    const loop = Animated.loop(Animated.timing(spin, { toValue: 1, duration: 1400, easing: Easing.linear, useNativeDriver: false }));
     loop.start();
     const timeout = setTimeout(() => {
-      Animated.timing(fade, { toValue: 0, duration: 280, useNativeDriver: true }).start(() => { setVisible(false); loop.stop(); spin.setValue(0); });
+      Animated.timing(fade, { toValue: 0, duration: 280, useNativeDriver: false }).start(() => { setVisible(false); loop.stop(); spin.setValue(0); });
     }, 420);
     return () => { clearTimeout(timeout); loop.stop(); };
   }, [pathname, fade, spin]);

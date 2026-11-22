@@ -27,7 +27,7 @@ function Entrance({ children, delay = 0, style }: { children: React.ReactNode; d
   const anim = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     anim.setValue(0);
-    const t = setTimeout(() => Animated.timing(anim, { toValue: 1, duration: 420, useNativeDriver: true }).start(), delay);
+    const t = setTimeout(() => Animated.timing(anim, { toValue: 1, duration: 420, useNativeDriver: false }).start(), delay);
     return () => clearTimeout(t);
   }, [anim, delay]);
   const translateY = anim.interpolate({ inputRange: [0, 1], outputRange: [8, 0] });

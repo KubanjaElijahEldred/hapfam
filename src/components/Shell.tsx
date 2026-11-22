@@ -17,7 +17,7 @@ import { IMG } from '../assets';
 import { useApp } from '../store';
 import type { Dept } from '../types';
 import { Avatar, Badge } from './ui';
-import { notifications as notificationApi } from '../services/backend';
+import { notifications as notificationApi, getToken } from '../services/backend';
 
 type IconType = React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>;
 
@@ -178,6 +178,11 @@ export function DepartmentShell({ dept, children }: { dept: Dept; children: Reac
 
 
   useEffect(() => {
+    if (!getToken()) router.replace(`/login?next=${encodeURIComponent(pathname)}` as any);
+  }, [pathname, router]);
+
+  useEffect(() => {
+    if (!getToken()) return;
     let alive = true;
     const sync = async () => {
       try {
