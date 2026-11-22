@@ -24,3 +24,7 @@ The following photographs were sourced from Unsplash (https://unsplash.com/licen
 
 Production photography in this folder is used for demonstration purposes only. Replace with
 company-owned photography before commercial deployment.
+
+## Sidebar background
+
+- `back.webp` is the WebP conversion of the project-supplied `back.png` (wave/cliff photograph), lightly darkened for white sidebar text.
