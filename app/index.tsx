@@ -41,8 +41,9 @@ export default function Launcher() {
   const cols = width >= 1200 ? 4 : width >= 760 ? 2 : 1;
 
   return (
-    <LinearGradient colors={[C.cream, '#F4F9E7', '#E9F5CC']} style={s.root}>
-      <View style={[s.page, { maxHeight: height }]}>
+    <ImageBackground source={IMG.back} style={s.root} contentFit="cover">
+      <LinearGradient colors={['rgba(8,44,27,0.68)', 'rgba(8,44,27,0.48)', 'rgba(8,44,27,0.76)']} style={s.pageOverlay}>
+        <View style={[s.page, { maxHeight: height }]}>
         {/* Header */}
         <View style={s.top}>
           <View style={s.brand}>
@@ -62,8 +63,8 @@ export default function Launcher() {
 
         {/* Hero */}
         <Entrance delay={60}>
-          <ImageBackground source={IMG.field} style={[s.hero, { height: compact ? 210 : 250 }]} contentFit="cover">
-            <LinearGradient colors={['rgba(8,44,27,0.72)', 'rgba(8,44,27,0.92)']} style={s.heroShade} />
+          <View style={[s.hero, { height: compact ? 210 : 250 }]}>
+            <View style={s.heroShade} />
             <View style={[s.heroInner, compact && { flexDirection: 'column', alignItems: 'flex-start' }]}>
               <View style={{ flex: 1.25, minWidth: 0 }}>
                 <View style={s.eyebrow}><Sparkles size={13} color={C.deep} /><Text style={s.eyebrowText}>INTEGRATED MANUFACTURING INTELLIGENCE</Text></View>
@@ -90,7 +91,7 @@ export default function Launcher() {
                 </View>
               ) : null}
             </View>
-          </ImageBackground>
+          </View>
         </Entrance>
 
         {/* Workspace section */}
@@ -154,27 +155,29 @@ export default function Launcher() {
             </View>
           ))}
         </View>
-      </View>
-    </LinearGradient>
+        </View>
+      </LinearGradient>
+    </ImageBackground>
   );
 }
 
 const s = StyleSheet.create({
   root: { flex: 1 },
+  pageOverlay: { position: 'absolute', inset: 0 },
   page: { width: '100%', maxWidth: 1400, alignSelf: 'center', paddingHorizontal: 26, paddingTop: 14, paddingBottom: 12 },
   top: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },
   mark: { width: 40, height: 40, borderRadius: 12, backgroundColor: C.forest, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(199,240,74,0.35)' },
-  brandName: { color: C.forest, fontSize: 19, fontWeight: '800', letterSpacing: 1.3 },
-  brandCo: { color: C.muted, fontWeight: '600' },
-  brandTag: { color: C.muted, fontSize: 12, marginTop: 2 },
+  brandName: { color: C.white, fontSize: 19, fontWeight: '800', letterSpacing: 1.3 },
+  brandCo: { color: '#CFE3D5', fontWeight: '600' },
+  brandTag: { color: '#CFE3D5', fontSize: 12, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  live: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: C.deep, borderRadius: RADIUS.pill, paddingHorizontal: 12, paddingVertical: 8 },
+  live: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: RADIUS.pill, paddingHorizontal: 12, paddingVertical: 8 },
   liveText: { color: C.lemon, fontSize: 10, fontWeight: '800', letterSpacing: 1 },
   signin: { flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: C.primary, borderRadius: RADIUS.pill, paddingHorizontal: 16, paddingVertical: 10 },
   signinText: { color: C.white, fontSize: 13, fontWeight: '800' },
-  hero: { borderRadius: RADIUS.lg, overflow: 'hidden', justifyContent: 'center' },
-  heroShade: { position: 'absolute', inset: 0 },
+  hero: { borderRadius: RADIUS.lg, overflow: 'hidden', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(199,240,74,0.28)' },
+  heroShade: { position: 'absolute', inset: 0, backgroundColor: 'rgba(8,44,27,0.18)' },
   heroInner: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 28, gap: 20 },
   eyebrow: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', backgroundColor: C.lemon, borderRadius: RADIUS.pill, paddingHorizontal: 11, paddingVertical: 6, marginBottom: 10 },
   eyebrowText: { color: C.deep, fontSize: 9.5, fontWeight: '800', letterSpacing: 1 },
@@ -191,10 +194,10 @@ const s = StyleSheet.create({
   showLabelText: { color: C.lemon, fontSize: 9, fontWeight: '800', letterSpacing: 1 },
   section: { marginTop: 14 },
   sectionHead: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 10 },
-  sectionTitle: { fontSize: 21, fontWeight: '800', color: C.text, letterSpacing: -0.4 },
-  sectionSub: { fontSize: 12, color: C.muted, marginTop: 2 },
-  feature: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: C.white, borderRadius: RADIUS.pill, borderWidth: 1, borderColor: C.border, paddingHorizontal: 11, paddingVertical: 6 },
-  featureText: { fontSize: 11, color: C.forest, fontWeight: '700' },
+  sectionTitle: { fontSize: 21, fontWeight: '800', color: C.white, letterSpacing: -0.4 },
+  sectionSub: { fontSize: 12, color: '#CFE3D5', marginTop: 2 },
+  feature: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: RADIUS.pill, borderWidth: 1, borderColor: 'rgba(255,255,255,0.24)', paddingHorizontal: 11, paddingVertical: 6 },
+  featureText: { fontSize: 11, color: C.white, fontWeight: '700' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 0, marginHorizontal: -5 },
   card: { backgroundColor: C.white, borderRadius: RADIUS.md, borderWidth: 1, borderColor: C.border, overflow: 'hidden', width: '100%', ...SHADOW.card },
   cardMain: { padding: 14, height: 145 },
@@ -211,8 +214,8 @@ const s = StyleSheet.create({
   flowNumText: { color: C.lemon, fontSize: 10, fontWeight: '800' },
   flowLabel: { color: C.white, fontSize: 11, fontWeight: '700' },
   flowLine: { height: 1, width: 26, backgroundColor: 'rgba(199,240,74,0.45)', marginHorizontal: 6 },
-  stats: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 14, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(16,61,40,0.12)', flexWrap: 'wrap', gap: 8 },
+  stats: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 14, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.18)', flexWrap: 'wrap', gap: 8 },
   statItem: { flexDirection: 'row', alignItems: 'center', gap: 7 },
   statNum: { color: C.primary, fontSize: 12, fontWeight: '800' },
-  statLabel: { color: C.muted, fontSize: 11, fontWeight: '700' },
+  statLabel: { color: '#CFE3D5', fontSize: 11, fontWeight: '700' },
 });
